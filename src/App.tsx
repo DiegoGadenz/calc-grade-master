@@ -15,7 +15,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="/calc-grade-master">
         <Routes>
           <Route path="/" element={<SimpleCalculator />} />
           <Route path="/detailed" element={<Index />} />
