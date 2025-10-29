@@ -1,39 +1,39 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { GraduationCap, ArrowRight, RotateCcw, Calculator } from "lucide-react";
+import { Calculator, ArrowRight, RotateCcw, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import ExamConfiguration from "@/components/ExamConfiguration";
-import StudentGrading from "@/components/StudentGrading";
-import GradeResult from "@/components/GradeResult";
-import StudentHistory from "@/components/StudentHistory";
+import SimpleExamConfig from "@/components/SimpleExamConfig";
+import SimpleStudentGrading from "@/components/SimpleStudentGrading";
+import SimpleGradeResult from "@/components/SimpleGradeResult";
+import SimpleStudentHistory from "@/components/SimpleStudentHistory";
 
-export interface ExamConfig {
-  totalWeight: number;
-  questions: Array<{ id: number; weight: number }>;
+export interface SimpleExamConfig {
+  totalValue: number;
+  totalQuestions: number;
 }
 
-export interface StudentGrade {
-  name: string;
-  scores: number[];
-  totalScore: number;
+export interface SimpleStudentGrade {
+  studentNumber: number;
+  correctAnswers: number;
+  score: number;
   percentage: number;
 }
 
 type Step = "config" | "grading" | "result";
 
-const Index = () => {
+const SimpleCalculator = () => {
   const [step, setStep] = useState<Step>("config");
-  const [examConfig, setExamConfig] = useState<ExamConfig | null>(null);
-  const [currentStudent, setCurrentStudent] = useState<StudentGrade | null>(null);
-  const [studentHistory, setStudentHistory] = useState<StudentGrade[]>([]);
+  const [examConfig, setExamConfig] = useState<SimpleExamConfig | null>(null);
+  const [currentStudent, setCurrentStudent] = useState<SimpleStudentGrade | null>(null);
+  const [studentHistory, setStudentHistory] = useState<SimpleStudentGrade[]>([]);
 
-  const handleConfigComplete = (config: ExamConfig) => {
+  const handleConfigComplete = (config: SimpleExamConfig) => {
     setExamConfig(config);
     setStep("grading");
   };
 
-  const handleGradingComplete = (student: StudentGrade) => {
+  const handleGradingComplete = (student: SimpleStudentGrade) => {
     setCurrentStudent(student);
     setStudentHistory((prev) => [...prev, student]);
     setStep("result");
@@ -58,19 +58,19 @@ const Index = () => {
         <header className="text-center mb-8 animate-fade-in">
           <div className="flex items-center justify-center gap-3 mb-3">
             <div className="bg-gradient-to-br from-primary to-primary/80 p-3 rounded-2xl shadow-lg">
-              <GraduationCap className="w-8 h-8 text-primary-foreground" />
+              <Calculator className="w-8 h-8 text-primary-foreground" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              Calculadora de Notas
+              Calculadora Rápida
             </h1>
           </div>
           <p className="text-muted-foreground text-lg mb-4">
-            Sistema profissional para avaliação de provas
+            Cálculo simplificado de notas por acertos
           </p>
-          <Link to="/">
+          <Link to="/detailed">
             <Button variant="outline" size="sm" className="gap-2">
-              <Calculator className="w-4 h-4" />
-              Calculadora Rápida
+              <Settings className="w-4 h-4" />
+              Calculadora Avançada
             </Button>
           </Link>
         </header>
@@ -78,19 +78,20 @@ const Index = () => {
         {/* Main Content */}
         <div className="space-y-6">
           {step === "config" && (
-            <ExamConfiguration onComplete={handleConfigComplete} />
+            <SimpleExamConfig onComplete={handleConfigComplete} />
           )}
 
           {step === "grading" && examConfig && (
-            <StudentGrading
+            <SimpleStudentGrading
               examConfig={examConfig}
+              studentNumber={studentHistory.length + 1}
               onComplete={handleGradingComplete}
               onReset={handleReset}
             />
           )}
 
           {step === "result" && currentStudent && (
-            <GradeResult
+            <SimpleGradeResult
               student={currentStudent}
               onNextStudent={handleNextStudent}
               onReset={handleReset}
@@ -99,7 +100,7 @@ const Index = () => {
 
           {/* Student History */}
           {studentHistory.length > 0 && step !== "config" && (
-            <StudentHistory students={studentHistory} />
+            <SimpleStudentHistory students={studentHistory} />
           )}
         </div>
       </div>
@@ -107,4 +108,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default SimpleCalculator;
