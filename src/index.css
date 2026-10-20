@@ -118,6 +118,19 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Fonte maior em computadores (tudo em rem escala junto) */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 106.25%;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    html {
+      font-size: 118.75%;
+    }
+  }
 }
 
 @layer utilities {

@@ -1,6 +1,8 @@
+import { useEnterKey } from "@/hooks/use-enter-key";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2, XCircle, ArrowRight, RotateCcw } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
+import { gradeColor } from "@/lib/grade";
 import type { StudentGrade } from "@/pages/Index";
 
 interface Props {
@@ -10,57 +12,30 @@ interface Props {
 }
 
 const GradeResult = ({ student, onNextStudent, onReset }: Props) => {
-  const isPassing = student.percentage >= 60;
+  useEnterKey(onNextStudent);
 
   return (
     <Card className="p-6 md:p-8 bg-gradient-to-br from-card to-card/80 shadow-[var(--shadow-elevated)] border-border/50 backdrop-blur-sm animate-fade-in">
       <div className="space-y-6">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div
-            className={`inline-flex items-center justify-center w-20 h-20 rounded-full ${
-              isPassing
-                ? "bg-gradient-to-br from-accent to-accent/80"
-                : "bg-gradient-to-br from-destructive to-destructive/80"
-            } shadow-lg`}
-          >
-            {isPassing ? (
-              <CheckCircle2 className="w-10 h-10 text-white" />
-            ) : (
-              <XCircle className="w-10 h-10 text-white" />
-            )}
-          </div>
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {student.name}
-            </h2>
-            <p
-              className={`text-lg ${
-                isPassing ? "text-accent" : "text-destructive"
-              } font-semibold`}
-            >
-              {isPassing ? "Aprovado!" : "Necessita Recuperação"}
-            </p>
-          </div>
+        <div className="text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+            {student.name}
+          </h2>
         </div>
 
         {/* Score Display */}
-        <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 rounded-2xl border border-primary/20 space-y-4">
-          <div className="flex items-center justify-center gap-4">
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-1">Nota Final</p>
-              <p className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                {student.totalScore.toFixed(2)}
-              </p>
-            </div>
-            <div className="h-16 w-px bg-border" />
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-1">Percentual</p>
-              <p className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                {student.percentage.toFixed(0)}%
-              </p>
-            </div>
-          </div>
+        <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 rounded-2xl border border-primary/20 text-center space-y-2">
+          <p className="text-base text-muted-foreground">Nota Final</p>
+          <p className={`text-7xl md:text-8xl font-bold ${gradeColor(student.percentage)}`}>
+            {student.totalScore.toFixed(2)}
+          </p>
+          <p className="text-lg text-muted-foreground">
+            <span className={`font-semibold ${gradeColor(student.percentage)}`}>
+              {student.percentage.toFixed(0)}%
+            </span>{" "}
+            de aproveitamento
+          </p>
         </div>
 
         {/* Question Breakdown */}

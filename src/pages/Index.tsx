@@ -84,6 +84,7 @@ const Index = () => {
           {step === "grading" && examConfig && (
             <StudentGrading
               examConfig={examConfig}
+              studentNumber={studentHistory.length + 1}
               onComplete={handleGradingComplete}
               onReset={handleReset}
             />

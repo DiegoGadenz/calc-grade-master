@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useEnterKey } from "@/hooks/use-enter-key";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -20,25 +21,39 @@ const SimpleStudentGrading = ({
   onReset,
 }: SimpleStudentGradingProps) => {
   const [correctAnswers, setCorrectAnswers] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const formRef = useRef<HTMLFormElement>(null);
+  useEnterKey(() => formRef.current?.requestSubmit());
+
+  const handleChange = (value: string) => {
+    // Aceita dígitos e um único separador decimal (vírgula ou ponto)
+    if (/^\d*([.,]\d*)?$/.test(value)) {
+      setCorrectAnswers(value);
+      setError("");
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const correct = parseInt(correctAnswers);
-    
-    if (correct >= 0 && correct <= examConfig.totalQuestions) {
-      const score = (correct / examConfig.totalQuestions) * examConfig.totalValue;
-      const percentage = (correct / examConfig.totalQuestions) * 100;
 
-      onComplete({
-        studentNumber,
-        correctAnswers: correct,
-        score: parseFloat(score.toFixed(2)),
-        percentage: parseFloat(percentage.toFixed(2)),
-      });
-      
-      setCorrectAnswers("");
+    const correct = parseFloat(correctAnswers.replace(",", "."));
+
+    if (isNaN(correct) || correct < 0 || correct > examConfig.totalQuestions) {
+      setError(`Informe um valor entre 0 e ${examConfig.totalQuestions}`);
+      return;
     }
+
+    const score = (correct / examConfig.totalQuestions) * examConfig.totalValue;
+    const percentage = (correct / examConfig.totalQuestions) * 100;
+
+    onComplete({
+      studentNumber,
+      correctAnswers: correct,
+      score: parseFloat(score.toFixed(2)),
+      percentage: parseFloat(percentage.toFixed(2)),
+    });
+
+    setCorrectAnswers("");
   };
 
   return (
@@ -57,20 +72,20 @@ const SimpleStudentGrading = ({
         </div>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="correctAnswers">Quantas questões acertou?</Label>
             <Input
               id="correctAnswers"
-              type="number"
-              min="0"
-              max={examConfig.totalQuestions}
+              type="text"
+              inputMode="decimal"
               value={correctAnswers}
-              onChange={(e) => setCorrectAnswers(e.target.value)}
+              onChange={(e) => handleChange(e.target.value)}
               placeholder={`0 a ${examConfig.totalQuestions}`}
               required
               autoFocus
             />
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <p className="text-sm text-muted-foreground">
               Cada questão vale {(examConfig.totalValue / examConfig.totalQuestions).toFixed(2)} pontos
             </p>

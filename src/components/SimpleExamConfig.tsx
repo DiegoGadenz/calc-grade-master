@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useEnterKey } from "@/hooks/use-enter-key";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,8 @@ interface SimpleExamConfigProps {
 const SimpleExamConfigComponent = ({ onComplete }: SimpleExamConfigProps) => {
   const [totalValue, setTotalValue] = useState<string>("10");
   const [totalQuestions, setTotalQuestions] = useState<string>("10");
+  const formRef = useRef<HTMLFormElement>(null);
+  useEnterKey(() => formRef.current?.requestSubmit());
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +40,7 @@ const SimpleExamConfigComponent = ({ onComplete }: SimpleExamConfigProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="totalValue">Valor da Prova</Label>
             <Input

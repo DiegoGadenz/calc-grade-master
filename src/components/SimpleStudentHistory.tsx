@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SimpleStudentGrade } from "@/pages/SimpleCalculator";
+import { gradeColor } from "@/lib/grade";
 
 interface SimpleStudentHistoryProps {
   students: SimpleStudentGrade[];
@@ -34,8 +35,8 @@ const SimpleStudentHistory = ({ students }: SimpleStudentHistoryProps) => {
             >
               <span className="font-medium">Aluno #{student.studentNumber}</span>
               <div className="text-right">
-                <p className="font-bold">{student.score} pts</p>
-                <p className="text-sm text-muted-foreground">{student.percentage}%</p>
+                <p className={`font-bold ${gradeColor(student.percentage)}`}>{student.score} pts</p>
+                <p className={`text-sm ${gradeColor(student.percentage)}`}>{student.percentage}%</p>
               </div>
             </div>
           ))}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEnterKey } from "@/hooks/use-enter-key";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,12 +10,13 @@ import type { ExamConfig, StudentGrade } from "@/pages/Index";
 
 interface Props {
   examConfig: ExamConfig;
+  studentNumber: number;
   onComplete: (student: StudentGrade) => void;
   onReset: () => void;
 }
 
-const StudentGrading = ({ examConfig, onComplete, onReset }: Props) => {
-  const [studentName, setStudentName] = useState("");
+const StudentGrading = ({ examConfig, studentNumber, onComplete, onReset }: Props) => {
+  const [studentName, setStudentName] = useState(`Aluno ${studentNumber}`);
   const [scores, setScores] = useState<string[]>(
     examConfig.questions.map(() => "")
   );
@@ -60,6 +62,8 @@ const StudentGrading = ({ examConfig, onComplete, onReset }: Props) => {
     setStudentName("");
     setScores(examConfig.questions.map(() => ""));
   };
+
+  useEnterKey(handleCalculate);
 
   return (
     <Card className="p-6 md:p-8 bg-gradient-to-br from-card to-card/80 shadow-[var(--shadow-card)] border-border/50 backdrop-blur-sm animate-fade-in">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEnterKey } from "@/hooks/use-enter-key";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -65,6 +66,8 @@ const ExamConfiguration = ({ onComplete }: Props) => {
     toast.success("Configuração salva! Agora você pode avaliar os alunos.");
     onComplete(config);
   };
+
+  useEnterKey(handleSubmit);
 
   return (
     <Card className="p-6 md:p-8 bg-gradient-to-br from-card to-card/80 shadow-[var(--shadow-card)] border-border/50 backdrop-blur-sm animate-fade-in">

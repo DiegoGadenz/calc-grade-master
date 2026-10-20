@@ -1,6 +1,8 @@
+import { useEnterKey } from "@/hooks/use-enter-key";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, RotateCcw, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
+import { gradeColor } from "@/lib/grade";
 import { SimpleStudentGrade } from "@/pages/SimpleCalculator";
 
 interface SimpleGradeResultProps {
@@ -10,43 +12,33 @@ interface SimpleGradeResultProps {
 }
 
 const SimpleGradeResult = ({ student, onNextStudent, onReset }: SimpleGradeResultProps) => {
-  const getStatus = () => {
-    if (student.percentage >= 70) return { label: "Aprovado", icon: CheckCircle2, color: "text-green-500" };
-    if (student.percentage >= 50) return { label: "Recuperação", icon: AlertCircle, color: "text-yellow-500" };
-    return { label: "Reprovado", icon: XCircle, color: "text-red-500" };
-  };
-
-  const status = getStatus();
-  const StatusIcon = status.icon;
+  useEnterKey(onNextStudent);
 
   return (
     <Card className="animate-fade-in border-2">
       <CardHeader className="text-center">
-        <CardTitle className="flex items-center justify-center gap-2">
-          <StatusIcon className={`w-6 h-6 ${status.color}`} />
+        <CardTitle>
           Aluno #{student.studentNumber}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center space-y-4">
-          <div>
-            <p className="text-sm text-muted-foreground mb-1">Acertos</p>
-            <p className="text-4xl font-bold">{student.correctAnswers}</p>
+          <div className="py-6 bg-primary/10 rounded-lg">
+            <p className="text-base text-muted-foreground mb-2">Nota</p>
+            <p className={`text-7xl md:text-8xl font-bold ${gradeColor(student.percentage)}`}>
+              {student.score.toLocaleString("pt-BR")}
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-primary/10 rounded-lg">
-              <p className="text-sm text-muted-foreground mb-1">Nota</p>
-              <p className="text-2xl font-bold">{student.score}</p>
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground mb-1">Acertos</p>
+              <p className="text-xl font-semibold">{student.correctAnswers.toLocaleString("pt-BR")}</p>
             </div>
-            <div className="p-4 bg-primary/10 rounded-lg">
+            <div className="p-3 bg-muted/50 rounded-lg">
               <p className="text-sm text-muted-foreground mb-1">Percentual</p>
-              <p className="text-2xl font-bold">{student.percentage}%</p>
+              <p className={`text-xl font-semibold ${gradeColor(student.percentage)}`}>{student.percentage.toLocaleString("pt-BR")}%</p>
             </div>
-          </div>
-
-          <div className={`p-4 rounded-lg ${status.color} bg-opacity-10`}>
-            <p className="text-lg font-semibold">{status.label}</p>
           </div>
         </div>
 
