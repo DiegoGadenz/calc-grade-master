@@ -27,7 +27,7 @@ const GradeResult = ({ student, onNextStudent, onReset }: Props) => {
         {/* Score Display */}
         <div className="bg-gradient-to-br from-primary/10 to-primary/5 p-6 md:p-8 rounded-2xl border border-primary/20 text-center space-y-2">
           <p className="text-base text-muted-foreground">Nota Final</p>
-          <p className={`text-7xl md:text-8xl font-bold ${gradeColor(student.percentage)}`}>
+          <p className={`text-6xl sm:text-7xl md:text-8xl font-bold ${gradeColor(student.percentage)}`}>
             {student.totalScore.toFixed(2)}
           </p>
           <p className="text-lg text-muted-foreground">

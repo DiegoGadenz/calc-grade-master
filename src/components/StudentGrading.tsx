@@ -130,7 +130,7 @@ const StudentGrading = ({ examConfig, studentNumber, onComplete, onReset }: Prop
                     onChange={(e) => updateScore(index, e.target.value)}
                     placeholder={`0 - ${question.weight}`}
                     max={question.weight}
-                    className="h-10 text-base"
+                    className="h-12 text-lg"
                   />
                 </div>
               </div>

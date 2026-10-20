@@ -5,7 +5,6 @@ import { Calculator, ArrowRight, RotateCcw, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import SimpleExamConfig from "@/components/SimpleExamConfig";
 import SimpleStudentGrading from "@/components/SimpleStudentGrading";
-import SimpleGradeResult from "@/components/SimpleGradeResult";
 import SimpleStudentHistory from "@/components/SimpleStudentHistory";
 
 export interface SimpleExamConfig {
@@ -20,12 +19,11 @@ export interface SimpleStudentGrade {
   percentage: number;
 }
 
-type Step = "config" | "grading" | "result";
+type Step = "config" | "grading";
 
 const SimpleCalculator = () => {
   const [step, setStep] = useState<Step>("config");
   const [examConfig, setExamConfig] = useState<SimpleExamConfig | null>(null);
-  const [currentStudent, setCurrentStudent] = useState<SimpleStudentGrade | null>(null);
   const [studentHistory, setStudentHistory] = useState<SimpleStudentGrade[]>([]);
 
   const handleConfigComplete = (config: SimpleExamConfig) => {
@@ -33,38 +31,31 @@ const SimpleCalculator = () => {
     setStep("grading");
   };
 
+  // A nota aparece na mesma tela e o campo já fica pronto para o próximo aluno
   const handleGradingComplete = (student: SimpleStudentGrade) => {
-    setCurrentStudent(student);
     setStudentHistory((prev) => [...prev, student]);
-    setStep("result");
-  };
-
-  const handleNextStudent = () => {
-    setCurrentStudent(null);
-    setStep("grading");
   };
 
   const handleReset = () => {
     setStep("config");
     setExamConfig(null);
-    setCurrentStudent(null);
     setStudentHistory([]);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 pt-16 pb-8 sm:pt-8 max-w-4xl">
         {/* Header */}
-        <header className="text-center mb-8 animate-fade-in">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="bg-gradient-to-br from-primary to-primary/80 p-3 rounded-2xl shadow-lg">
-              <Calculator className="w-8 h-8 text-primary-foreground" />
+        <header className="text-center mb-6 animate-fade-in">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="bg-gradient-to-br from-primary to-primary/80 p-1.5 rounded-lg">
+              <Calculator className="w-5 h-5 text-primary-foreground" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
               Calculadora Rápida
             </h1>
           </div>
-          <p className="text-muted-foreground text-lg mb-4">
+          <p className="text-muted-foreground text-sm mb-3">
             Cálculo simplificado de notas por acertos
           </p>
           <Link to="/detailed">
@@ -85,21 +76,14 @@ const SimpleCalculator = () => {
             <SimpleStudentGrading
               examConfig={examConfig}
               studentNumber={studentHistory.length + 1}
+              lastResult={studentHistory[studentHistory.length - 1]}
               onComplete={handleGradingComplete}
               onReset={handleReset}
             />
           )}
 
-          {step === "result" && currentStudent && (
-            <SimpleGradeResult
-              student={currentStudent}
-              onNextStudent={handleNextStudent}
-              onReset={handleReset}
-            />
-          )}
-
           {/* Student History */}
-          {studentHistory.length > 0 && step !== "config" && (
+          {studentHistory.length > 0 && step === "grading" && (
             <SimpleStudentHistory students={studentHistory} />
           )}
         </div>

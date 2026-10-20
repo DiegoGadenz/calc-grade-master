@@ -12,18 +12,32 @@ interface SimpleExamConfigProps {
 }
 
 const SimpleExamConfigComponent = ({ onComplete }: SimpleExamConfigProps) => {
-  const [totalValue, setTotalValue] = useState<string>("10");
-  const [totalQuestions, setTotalQuestions] = useState<string>("10");
+  const [totalValue, setTotalValue] = useState<string>("");
+  const [totalQuestions, setTotalQuestions] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
   useEnterKey(() => formRef.current?.requestSubmit());
 
+  const handleValueChange = (value: string) => {
+    // Aceita dígitos e um único separador decimal (vírgula ou ponto)
+    if (/^\d*([.,]\d*)?$/.test(value)) {
+      setTotalValue(value);
+      setError("");
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const valueNum = parseFloat(totalValue);
+
+    const valueNum = parseFloat(totalValue.replace(",", "."));
     const questionsNum = parseInt(totalQuestions);
 
-    if (valueNum > 0 && questionsNum > 0) {
+    if (isNaN(valueNum) || valueNum <= 0) {
+      setError("Informe um valor maior que 0");
+      return;
+    }
+
+    if (questionsNum > 0) {
       onComplete({
         totalValue: valueNum,
         totalQuestions: questionsNum,
@@ -45,14 +59,16 @@ const SimpleExamConfigComponent = ({ onComplete }: SimpleExamConfigProps) => {
             <Label htmlFor="totalValue">Valor da Prova</Label>
             <Input
               id="totalValue"
-              type="number"
-              step="0.1"
-              min="0.1"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
               value={totalValue}
-              onChange={(e) => setTotalValue(e.target.value)}
-              placeholder="Ex: 10"
+              onChange={(e) => handleValueChange(e.target.value)}
+              placeholder="Ex: 10 ou 2,5"
+              autoFocus
               required
             />
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
 
           <div className="space-y-2">

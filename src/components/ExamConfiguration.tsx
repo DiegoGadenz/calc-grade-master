@@ -132,7 +132,7 @@ const ExamConfiguration = ({ onComplete }: Props) => {
                       updateQuestionWeight(question.id, e.target.value)
                     }
                     placeholder="Peso da questão"
-                    className="h-10"
+                    className="h-12"
                   />
                 </div>
                 <Button

@@ -131,6 +131,13 @@ All colors MUST be HSL.
       font-size: 118.75%;
     }
   }
+
+  /* Monitores 1440p/4K sem escala do sistema */
+  @media (min-width: 2400px) {
+    html {
+      font-size: 137.5%;
+    }
+  }
 }
 
 @layer utilities {

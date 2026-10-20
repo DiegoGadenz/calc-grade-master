@@ -53,18 +53,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 pt-16 pb-8 sm:pt-8 max-w-4xl">
         {/* Header */}
-        <header className="text-center mb-8 animate-fade-in">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="bg-gradient-to-br from-primary to-primary/80 p-3 rounded-2xl shadow-lg">
-              <GraduationCap className="w-8 h-8 text-primary-foreground" />
+        <header className="text-center mb-6 animate-fade-in">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <div className="bg-gradient-to-br from-primary to-primary/80 p-1.5 rounded-lg">
+              <GraduationCap className="w-5 h-5 text-primary-foreground" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
               Calculadora de Notas
             </h1>
           </div>
-          <p className="text-muted-foreground text-lg mb-4">
+          <p className="text-muted-foreground text-sm mb-3">
             Sistema profissional para avaliação de provas
           </p>
           <Link to="/">
