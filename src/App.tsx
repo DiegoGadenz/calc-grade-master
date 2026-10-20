@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import ThemeToggle from "./components/ThemeToggle";
+import AmbientSounds from "./components/AmbientSounds";
 import SimpleCalculator from "./pages/SimpleCalculator";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -23,7 +24,10 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <ThemeToggle />
+        <div className="fixed top-4 right-4 z-50 flex gap-2">
+          <AmbientSounds />
+          <ThemeToggle />
+        </div>
         <BrowserRouter basename="/calc-grade-master">
           <Routes>
             <Route path="/" element={<SimpleCalculator />} />
